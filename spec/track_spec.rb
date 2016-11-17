@@ -126,6 +126,13 @@ describe Track do
         expect(track_instance.can_be_added_in_morning?(Talk.new("Fast Talk 11min"))).to be false
       end
     end
+    context "when a morning is full" do
+      before(:each){ track_instance.add_talk(Talk.new("Some cool talk 180min"))}
+      it "can't add a talk" do
+        expect(track_instance.can_be_added_in_morning?(Talk.new("Fast Talk 10min"))).to be false
+
+      end
+    end
   end
 
   describe '#can_be_added_in_afternoon?' do

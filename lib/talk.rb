@@ -11,7 +11,7 @@ class Talk
   end
 
   def duration_in_minutes
-    if duration.match(/lighting/)
+    if duration.match(/lightning/)
       '5min'
     else
       duration

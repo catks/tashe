@@ -24,20 +24,19 @@ User Interface CSS in Rails Apps 30min"
   end
 
   let(:result_tracks) do
-"Track 1:
+    "Track 1:
 09:00AM Writing Fast Tests Against Enterprise Rails
 10:00AM Overdoing it in Python
 10:45AM Lua for the Masses
 11:15AM Ruby Errors from Mismatched Gem Versions
-12:00PM Rails for Python Developers
 12:00PM Lunch
 01:00PM Common Ruby Errors
-01:45PM Communicating Over Distance
-02:45PM Accounting-Driven Development
-03:30PM Woah
-04:00PM Sit Down and Write
-04:30PM Programming in the Boondocks of Seattle
-05:00PM Networking Event
+01:45PM Rails for Python Developers
+01:50PM Communicating Over Distance
+02:50PM Accounting-Driven Development
+03:35PM Woah
+04:05PM Sit Down and Write
+04:35PM Networking Event
 
 Track 2:
 09:00AM Pair Programming vs Noise
@@ -45,11 +44,12 @@ Track 2:
 10:45AM Ruby on Rails: Why We Should Move On
 12:00PM Lunch
 01:00PM Clojure Ate Scala (on my project)
-01:45PM Ruby vs. Clojure for Back-End Development
-02:15PM Ruby on Rails Legacy App Maintenance
-03:15PM A World Without HackerNews
-03:45PM User Interface CSS in Rails Apps
-04:15PM Networking Event"
+01:45PM Programming in the Boondocks of Seattle
+02:15PM Ruby vs. Clojure for Back-End Development
+02:45PM Ruby on Rails Legacy App Maintenance
+03:45PM A World Without HackerNews
+04:15PM User Interface CSS in Rails Apps
+04:45PM Networking Event"
   end
 let(:conference_instance){Conference.new(talks_text)}
 

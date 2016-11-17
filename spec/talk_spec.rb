@@ -4,7 +4,7 @@ describe Talk do
   let(:minutes){"#{[*5..60].sample}min"}
   let(:title){"My awesome talk"}
   let(:talk_instance){Talk.new("#{title} #{minutes}")}
-  let(:lighting_talk_instance){Talk.new("#{title} lighting")}
+  let(:lightning_talk_instance){Talk.new("#{title} lightning")}
   let(:some_time){Time.now}
   let(:talk_instance_with_start_time) do
     talk_instance.start_time = some_time
@@ -27,8 +27,8 @@ describe Talk do
 
       it {expect(talk_instance.duration).to eq minutes}
 
-      context 'when talk duration is lighting' do
-        it {expect(lighting_talk_instance.duration).to eq('lighting')}
+      context 'when talk duration is lightning' do
+        it {expect(lightning_talk_instance.duration).to eq('lightning')}
       end
     end
 
@@ -47,9 +47,9 @@ describe Talk do
       end
     end
 
-    context 'when talk is lighting' do
+    context 'when talk is lightning' do
       it "return the duration in minutes" do
-        expect(lighting_talk_instance.duration_in_minutes).to eq('5min')
+        expect(lightning_talk_instance.duration_in_minutes).to eq('5min')
       end
     end
   end

@@ -21,4 +21,14 @@ class Talk
   def end_time
     self.start_time + (time_duration * 60)
   end
+
+  def to_output_format
+    "#{format_time(start_time)} #{title}"
+  end
+
+  private
+
+  def format_time(time)
+    time.strftime('%I:%M%p')
+  end
 end

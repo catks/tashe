@@ -14,6 +14,16 @@ describe Track do
     track_instance.add_talk(Talk.new("Bum Talk 60min"))
     track_instance
   end
+
+  let(:track_instance_with_full_time) do
+    track_instance_with_full_morning.add_talk(Talk.new("Okay Talk 60min"))
+    track_instance_with_full_morning.add_talk(Talk.new("Okay Talk 60min"))
+    track_instance_with_full_morning.add_talk(Talk.new("Okay Talk 60min"))
+    track_instance_with_full_morning.add_talk(Talk.new("Okay Talk 60min"))
+    track_instance_with_full_morning
+  end
+
+  let(:sample_talk){Talk.new('Okay talk 10min')}
   describe 'attributes' do
     describe 'number' do
       it "can be created with number" do
@@ -28,6 +38,12 @@ describe Track do
     end
   end
 
+  describe "#time_in_minutes" do
+    it "returns the max time in minutes that a Track can have" do
+      minutes = 7 * 60 #& hours in minutes
+      expect(Track.time_in_minutes).to eq(minutes)
+    end
+  end
   describe "::beginning_time" do
     it "returns a time starting at 9:00am" do
       expect(Track.beginning_time.hour).to eq(9)
@@ -120,9 +136,27 @@ describe Track do
       end
       it "can't add a talk of 11min" do
         expect(track_instance_with_full_morning.can_be_added_in_afternoon?(Talk.new("Fast Talk 11min"))).to be false
-        puts track_instance_with_full_morning.morning_talks.inspect
       end
     end
+  end
+
+  describe 'can_be_added?' do
+    context 'when track is empty' do
+      it "returns true" do
+        expect(track_instance.can_be_added?(sample_talk)).to be true
+      end
+    end
+    context 'when track is full in morning but empty in afternoon' do
+      it "returns true" do
+        expect(track_instance_with_full_morning.can_be_added?(sample_talk)).to be true
+      end
+    end
+    context 'when track is full' do
+      it "returns true" do
+        expect(track_instance_with_full_time.can_be_added?(sample_talk)).to be false
+      end
+    end
+
   end
 
   describe '#first_time_avaible_in_morning' do
@@ -178,4 +212,18 @@ describe Track do
     end
   end
 
+  describe 'to_output_format' do
+    it "returns a string" do
+      expect(track_instance_with_full_time.to_output_format).to be_an(String)
+    end
+    it "has track number in the beggining" do
+      expect(track_instance_with_full_time.to_output_format).to match(/^Track \d:/)
+    end
+    it "has lunch" do
+      expect(track_instance_with_full_time.to_output_format).to match(/12:00PM Lunch/)
+    end
+    it "has the networking event" do
+      expect(track_instance_with_full_time.to_output_format).to match(/\d{2}:\d{2}PM Networking Event\n/)
+    end
+  end
 end

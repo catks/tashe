@@ -62,6 +62,10 @@ class Track
     talk.time_duration <= remaning_time_in_afternoon
   end
 
+  def can_be_added?(talk)
+    can_be_added_in_morning?(talk) || can_be_added_in_afternoon?(talk)
+  end
+
   def remaning_time_in_afternoon
     last_time = @afternoon_talks ? @afternoon_talks.last.end_time : Track.afternoon_begin_time
     (Track.max_end_time - last_time) / 60 #transform in minutes
@@ -88,6 +92,11 @@ class Track
     Time.new(t.year, t.month, t.day, MAX_END_TIME)
   end
 
+  def self.time_in_minutes
+    t = Track.new(1)
+    t.remaning_time_in_morning + t.remaning_time_in_afternoon
+  end
+
   def first_time_avaible_in_morning
     if morning_talks.empty?
       Track.beginning_time
@@ -104,12 +113,11 @@ class Track
     end
   end
 
-  def set_time(my_talks,start_time)
-    time = start_time
-    my_talks.each do |talk|
-      talk.start_time = time
-      time = talk.end_time
-    end
-    my_talks
+  def to_output_format
+    "Track #{self.number}:\n" +
+    @morning_talks.map(&:to_output_format).reduce(""){ |memo,val| memo + val + "\n" } +
+    "#{LUNCH_TIME}PM Lunch\n" +
+    @afternoon_talks.map(&:to_output_format).reduce(""){ |memo,val| memo + val + "\n" } +
+    "#{afternoon_talks.last.end_time.strftime('%I:%M%p')} Networking Event\n"
   end
 end

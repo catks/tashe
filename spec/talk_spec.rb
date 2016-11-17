@@ -69,4 +69,14 @@ describe Talk do
     end
   end
 
+  describe 'to_output_format' do
+    it "returns a string" do
+      expect(talk_instance_with_start_time.to_output_format).to be_an(String)
+    end
+
+    it "returns a valid output" do
+      expect(talk_instance_with_start_time.to_output_format).to match(/\d{2}:\d{2}(AM|PM) \w+/)
+    end
+  end
+
 end

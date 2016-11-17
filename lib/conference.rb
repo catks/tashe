@@ -2,6 +2,7 @@ class Conference
   attr_reader :talks,:tracks
 
   def initialize(talks_text)
+    talks_text.gsub!(/^$\n/, '')
     @talks = []
     talks_text.each_line do |line|
       @talks << Talk.new(line)

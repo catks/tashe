@@ -25,9 +25,14 @@ class Conference
   def to_output_format
     result = ""
     @tracks.each do |track|
-      result << track.to_output_format + "\n"
+      result << track.to_output_format(networking_event_time) + "\n"
     end
     result
+  end
+
+  def networking_event_time
+    latest_end_time = @tracks.map{ |t| t.talks.last.end_time}.max
+    latest_end_time.hour >= 16 ? latest_end_time.strftime('%I:%M%p') : '04:00PM'
   end
 
   def self.how_many_tracks_for(minutes)

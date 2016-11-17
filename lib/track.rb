@@ -113,11 +113,11 @@ class Track
     end
   end
 
-  def to_output_format
+  def to_output_format(network_event_time)
     "Track #{self.number}:\n" +
     @morning_talks.map(&:to_output_format).reduce(""){ |memo,val| memo + val + "\n" } +
     "#{LUNCH_TIME}PM Lunch\n" +
     @afternoon_talks.map(&:to_output_format).reduce(""){ |memo,val| memo + val + "\n" } +
-    "#{afternoon_talks.last.end_time.strftime('%I:%M%p')} Networking Event\n"
+    "#{network_event_time} Networking Event\n"
   end
 end

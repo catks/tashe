@@ -130,7 +130,6 @@ describe Track do
       before(:each){ track_instance.add_talk(Talk.new("Some cool talk 180min"))}
       it "can't add a talk" do
         expect(track_instance.can_be_added_in_morning?(Talk.new("Fast Talk 10min"))).to be false
-
       end
     end
   end
@@ -220,17 +219,21 @@ describe Track do
   end
 
   describe 'to_output_format' do
+    let(:networking_event_time){'05:00PM'}
+    it "receives the time of networking event as parameter" do
+      expect(track_instance_with_full_time.to_output_format(networking_event_time)).to be_an(String)
+    end
     it "returns a string" do
-      expect(track_instance_with_full_time.to_output_format).to be_an(String)
+      expect(track_instance_with_full_time.to_output_format(networking_event_time)).to be_an(String)
     end
     it "has track number in the beggining" do
-      expect(track_instance_with_full_time.to_output_format).to match(/^Track \d:/)
+      expect(track_instance_with_full_time.to_output_format(networking_event_time)).to match(/^Track \d:/)
     end
     it "has lunch" do
-      expect(track_instance_with_full_time.to_output_format).to match(/12:00PM Lunch/)
+      expect(track_instance_with_full_time.to_output_format(networking_event_time)).to match(/12:00PM Lunch/)
     end
     it "has the networking event" do
-      expect(track_instance_with_full_time.to_output_format).to match(/\d{2}:\d{2}PM Networking Event\n/)
+      expect(track_instance_with_full_time.to_output_format(networking_event_time)).to match(/\d{2}:\d{2}PM Networking Event\n/)
     end
   end
 end

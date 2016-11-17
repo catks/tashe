@@ -23,6 +23,16 @@ A World Without HackerNews 30min
 User Interface CSS in Rails Apps 30min"
   end
 
+  let(:few_talks_text) do
+    "Writing Fast Tests Against Enterprise Rails 60min
+Overdoing it in Python 45min
+Lua for the Masses 30min
+Ruby Errors from Mismatched Gem Versions 45min
+Common Ruby Errors 45min
+Rails for Python Developers lightning
+"
+  end
+
   let(:result_tracks) do
     "Track 1:
 09:00AM Writing Fast Tests Against Enterprise Rails
@@ -36,7 +46,7 @@ User Interface CSS in Rails Apps 30min"
 02:50PM Accounting-Driven Development
 03:35PM Woah
 04:05PM Sit Down and Write
-04:35PM Networking Event
+04:45PM Networking Event
 
 Track 2:
 09:00AM Pair Programming vs Noise
@@ -52,7 +62,7 @@ Track 2:
 04:45PM Networking Event"
   end
 let(:conference_instance){Conference.new(talks_text)}
-
+let(:conference_with_few_talks){Conference.new(few_talks_text)}
   describe '#new' do
     context 'with talks text' do
       it "can be created" do
@@ -74,13 +84,28 @@ let(:conference_instance){Conference.new(talks_text)}
     end
     it "match the expected result" do
       expect(conference_instance.to_output_format.strip).to eq(result_tracks)
-
     end
   end
+
+  describe '#networking_event_time' do
+    context 'with a track with last talk ending at 4:35PM and another ending at 4:45PM' do
+      it "returns 04:45PM" do
+        expect(conference_instance.networking_event_time).to eq('04:45PM')
+      end
+    end
+    context 'when all talks end before 04:00PM' do
+      it "returns 4:00PM" do
+        expect(conference_with_few_talks.networking_event_time).to eq('04:00PM')
+      end
+    end
+  end
+
   describe '::how_many_tracks_for' do
     it "calculate the tracks needed given the amount of time for talks" do
       minutes = 14 * 60 #14 hours in minutes
       expect(Conference.how_many_tracks_for(minutes)).to eq(2)
     end
   end
+
+
 end

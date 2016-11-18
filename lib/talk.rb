@@ -2,8 +2,12 @@ class Talk
   attr_accessor :title, :duration, :start_time
   REGEX_MATCHER = /(.+) (.+)$/
   def initialize(line)
-    self.title = line[REGEX_MATCHER,1]
-    self.duration = line[REGEX_MATCHER,2]
+    title = line[REGEX_MATCHER,1]
+    duration = line[REGEX_MATCHER,2]
+    raise "Invalid title '#{title}'" unless title_valid?(title)
+    raise "Invalid duration '#{title}'" unless duration_valid?(duration)
+    self.title = title
+    self.duration = duration
   end
 
   def time_duration
@@ -30,5 +34,13 @@ class Talk
 
   def format_time(time)
     time.strftime('%I:%M%p')
+  end
+
+  def title_valid?(title)
+    !title.match(/\d/) && title.match(/\w+/)
+  end
+
+  def duration_valid?(duration)
+    !!duration.match(/(\d+min|lightning)$/)
   end
 end

@@ -23,11 +23,9 @@ class Conference
   end
 
   def to_output_format
-    result = ""
-    @tracks.each do |track|
-      result << track.to_output_format(networking_event_time) + "\n"
+    @tracks.reduce("") do |memo,track|
+      memo + track.to_output_format(networking_event_time) + "\n"
     end
-    result
   end
 
   def networking_event_time

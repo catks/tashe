@@ -8,23 +8,25 @@ class Track
   attr_accessor :number
 
   def initialize(number,*talks)
+    @morning_talks = []
+    @afternoon_talks = []
     self.number = number
+
     talks.each do |talk|
       add_talk talk
     end
+
   end
 
   def add_talk(talk)
     talk.start_time = first_time_avaible_in_morning
     if can_be_added_in_morning?(talk)
-      @morning_talks ||= []
       @morning_talks << talk
       return true
     end
 
     talk.start_time = first_time_avaible_in_afternoon
     if can_be_added_in_afternoon?(talk)
-      @afternoon_talks ||= []
       @afternoon_talks << talk
       return true
     end
@@ -35,7 +37,7 @@ class Track
   end
 
   def talks
-    @talks = @morning_talks.to_a + @afternoon_talks.to_a
+    @morning_talks.to_a + @afternoon_talks.to_a
   end
 
   def morning_talks
@@ -46,33 +48,28 @@ class Track
     @afternoon_talks || []
   end
 
-
   def can_be_added_in_morning?(talk)
     return true if @morning_talks.nil?
-    talk.time_duration <= remaning_time_in_morning
-  end
-
-  def remaning_time_in_morning
-    last_time = @morning_talks ? @morning_talks.last.end_time : Track.beginning_time
-    (Track.lunch_time - last_time) / 60 #transform in minutes
+    talk.time_duration <= remaning_time_in(:morning)
   end
 
   def can_be_added_in_afternoon?(talk)
     return true if @afternoon_talks.nil?
-    talk.time_duration <= remaning_time_in_afternoon
+    talk.time_duration <= remaning_time_in(:afternoon)
   end
 
   def can_be_added?(talk)
     can_be_added_in_morning?(talk) || can_be_added_in_afternoon?(talk)
   end
 
-  def remaning_time_in_afternoon
-    last_time = @afternoon_talks ? @afternoon_talks.last.end_time : Track.afternoon_begin_time
-    (Track.max_end_time - last_time) / 60 #transform in minutes
+  def remaning_time_in(period)
+    period_talks = instance_variable_get("@#{period}_talks")
+    last_time = !period_talks.empty? ? period_talks.last.end_time : Track.send("#{period}_begin_time")
+
+    (Track.send("#{period}_end_time") - last_time) / 60 #transform in minutes
   end
 
-
-  def self.beginning_time
+  def self.morning_begin_time
     t = Time.now
     Time.new(t.year, t.month, t.day, START_TIME)
   end
@@ -82,26 +79,26 @@ class Track
     Time.new(t.year, t.month, t.day, AFTERNOON_START_TIME)
   end
 
-  def self.lunch_time
+  def self.morning_end_time
     t = Time.now
     Time.new(t.year, t.month, t.day, LUNCH_TIME)
   end
 
-  def self.max_end_time
+  def self.afternoon_end_time
     t = Time.now
     Time.new(t.year, t.month, t.day, MAX_END_TIME)
   end
 
   def self.time_in_minutes
     t = Track.new(1)
-    t.remaning_time_in_morning + t.remaning_time_in_afternoon
+    t.remaning_time_in(:morning) + t.remaning_time_in(:afternoon)
   end
 
   def first_time_avaible_in_morning
     if morning_talks.empty?
-      Track.beginning_time
+      Track.morning_begin_time
     else
-      @morning_talks.last.end_time
+      morning_talks.last.end_time
     end
   end
 

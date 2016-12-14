@@ -46,15 +46,15 @@ describe Track do
   end
   describe "::beginning_time" do
     it "returns a time starting at 9:00am" do
-      expect(Track.beginning_time.hour).to eq(9)
-      expect(Track.beginning_time.min).to eq(0)
+      expect(Track.morning_begin_time.hour).to eq(9)
+      expect(Track.morning_begin_time.min).to eq(0)
     end
   end
 
   describe "::lunch_time" do
     it "returns a time starting at 12:00am" do
-      expect(Track.lunch_time.hour).to eq(12)
-      expect(Track.lunch_time.min).to eq(0)
+      expect(Track.morning_end_time.hour).to eq(12)
+      expect(Track.morning_end_time.min).to eq(0)
     end
   end
 
@@ -67,29 +67,29 @@ describe Track do
 
   describe "::max_end_time" do
     it "returns a time of 17:00am" do
-      expect(Track.max_end_time.hour).to eq(17)
-      expect(Track.max_end_time.min).to eq(0)
+      expect(Track.afternoon_end_time.hour).to eq(17)
+      expect(Track.afternoon_end_time.min).to eq(0)
     end
   end
 
   describe "#remaning_time_in_morning" do
     context "when no talk was added" do
       it "returns the 3 hours" do
-        expect(track_instance.remaning_time_in_morning).to eq(3 * 60) # 3 hours in minutes
+        expect(track_instance.remaning_time_in(:morning)).to eq(3 * 60) # 3 hours in minutes
       end
     end
 
     context "when a talk of 45 minutes is added" do
       before(:each){ track_instance.add_talk(Talk.new("Some cool talk 45min"))}
       it "returns the 2 hours and 15 minutes" do
-        expect(track_instance.remaning_time_in_morning).to eq((2 + 15.0 / 60) * 60) # 2 hours and 5 minutes in minutes
+        expect(track_instance.remaning_time_in(:morning)).to eq((2 + 15.0 / 60) * 60) # 2 hours and 5 minutes in minutes
       end
     end
 
     context "when morning talks are full" do
       before(:each){ track_instance.add_talk(Talk.new("Some cool talk 180min"))}
       it "returns 0 minutes" do
-        expect(track_instance.remaning_time_in_morning).to eq(0)
+        expect(track_instance.remaning_time_in(:morning)).to eq(0)
       end
     end
   end
@@ -97,21 +97,21 @@ describe Track do
   describe "#remaning_time_in_afternoon" do
     context "when no talk was added" do
       it "returns the 4 hours" do
-        expect(track_instance.remaning_time_in_afternoon).to eq(4 * 60) # 4 hours in minutes
+        expect(track_instance.remaning_time_in(:afternoon)).to eq(4 * 60) # 4 hours in minutes
       end
     end
 
     context "when a talk of 45 minutes is added" do
       before(:each){ track_instance_with_full_morning.add_talk(Talk.new("Some cool talk 45min"))}
       it "returns the 3 hours and 15 minutes" do
-        expect(track_instance_with_full_morning.remaning_time_in_afternoon).to eq((3 + 15.0 / 60) * 60) # 3 hours and 5 minutes in minutes
+        expect(track_instance_with_full_morning.remaning_time_in(:afternoon)).to eq((3 + 15.0 / 60) * 60) # 3 hours and 5 minutes in minutes
       end
     end
 
     context "when afternoon talks are full" do
       before(:each){ track_instance_with_full_morning.add_talk(Talk.new("Some cool talk 240min"))}
       it "returns 0 minutes" do
-        expect(track_instance.remaning_time_in_afternoon).to eq(0)
+        expect(track_instance.remaning_time_in(:afternoon)).to eq(0)
       end
     end
   end
